@@ -10,8 +10,6 @@ import static com.mariabeyrak.scatterintegration.ScatterService.injectJs;
 
 public class Scatter {
     private static String TAG = "<<SS";
-
-    private String userAgentString = "ANDROID_USER_AGENT";
     private String javascriptInterfaceName = "WebView";
 
     private WebView webView;
@@ -33,9 +31,14 @@ public class Scatter {
             Scanner s = new Scanner(inputStream).useDelimiter("\\A");
             String jsScript = s.hasNext() ? s.next() : "";
 
-            final String script = "var script = document.createElement('script'); " +
-                    "script.type = 'text/javascript'; " +
-                    "script.text = \"" + jsScript.replace(userAgentString, webView.getSettings().getUserAgentString());
+            final String script = new StringBuilder().append("var SP_SCRIPT = document.createElement('script');\n")
+                    .append("var SP_USER_AGENT_ANDROID = \"").append(webView.getSettings().getUserAgentString()).append("\";\n")
+                    .append("var SP_USER_AGENT_IOS = \"SP_USER_AGENT_IOS\";\n")
+                    .append("var SP_TIMEOUT = ").append(60 * 1000).append(";\n")
+                    .append("SP_SCRIPT.type = 'text/javascript';\n")
+                    .append("SP_SCRIPT.text = \"")
+                    .append(jsScript)
+                    .append("\";document.getElementsByTagName('head')[0].appendChild(SP_SCRIPT);").toString();
 
             injectJs(webView, script);
         } catch (Exception e) {
