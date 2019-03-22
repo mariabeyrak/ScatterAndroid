@@ -6,7 +6,9 @@ public enum MethodName {
     @SerializedName("callbackGetEosAccount")
     GetEosAccount("callbackGetEosAccount"),
     @SerializedName("callbackRequestSignature")
-    RequestSignature("callbackRequestSignature");
+    RequestSignature("callbackRequestSignature"),
+    @SerializedName("callbackRequestMsgSignature")
+    RequestMsgSignature("callbackRequestMsgSignature");
 
     private String method;
 

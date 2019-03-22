@@ -8,6 +8,8 @@ import com.google.gson.Gson;
 import com.mariabeyrak.scatterintegration.models.ScatterRequest;
 
 import static com.mariabeyrak.scatterintegration.ScatterService.getEosAccount;
+import static com.mariabeyrak.scatterintegration.ScatterService.requestMsgSignature;
+import static com.mariabeyrak.scatterintegration.ScatterService.requestSignature;
 
 class ScatterWebInterface {
     private static String TAG = "<<SS";
@@ -28,9 +30,18 @@ class ScatterWebInterface {
         ScatterRequest scatterRequest = gson.fromJson(data, ScatterRequest.class);
         Log.d(TAG, "scatterRequest: " + scatterRequest.toString());
 
+
         switch (scatterRequest.getMethodName()) {
             case GetEosAccount: {
                 getEosAccount(webView, scatterClient);
+                break;
+            }
+            case RequestSignature: {
+                requestSignature(scatterRequest.getParams(), webView, scatterClient);
+                break;
+            }
+            case RequestMsgSignature: {
+                requestMsgSignature(scatterRequest.getParams(), webView, scatterClient);
                 break;
             }
             default:

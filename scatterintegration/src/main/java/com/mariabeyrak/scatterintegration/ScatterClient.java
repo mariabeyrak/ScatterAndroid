@@ -1,11 +1,32 @@
 package com.mariabeyrak.scatterintegration;
 
-public interface ScatterClient {
-    interface AccountReceived {
-        void onAccountReceivedCallback(String accountName);
+import com.paytomat.eos.PrivateKey;
 
+public abstract class ScatterClient {
+
+    public interface AccountReceived {
+        void onAccountReceivedCallback(String accountName);
         void onAccountReceivedErrorCallback(Error error);
     }
 
-    void getAccount(AccountReceived onAccountReceived);
+    public interface TransactionCompleted {
+        void onTransactionCompletedCallback(PrivateKey key);
+
+        void onTransactionCompletedErrorCallback(Error error);
+    }
+
+    public interface TransactionMsgCompleted {
+        void onTransactionCompletedCallback(PrivateKey key);
+
+        void onTransactionCompletedErrorCallback(Error error);
+    }
+
+    void getAccount(AccountReceived onAccountReceived) {
+    }
+
+    void completeTransaction(TransactionCompleted onTransactionCompleted) {
+    }
+
+    void completeMsgTransaction(TransactionMsgCompleted onTransactionMsgCompleted) {
+    }
 }

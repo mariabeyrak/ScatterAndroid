@@ -12,19 +12,30 @@ import android.webkit.WebViewClient;
 
 import com.mariabeyrak.scatterintegration.Scatter;
 import com.mariabeyrak.scatterintegration.ScatterClient;
+import com.paytomat.eos.PrivateKey;
 
 public class MainActivity extends AppCompatActivity {
     private static String TAG = "<<SS";
 
     private Scatter scatterImplementation;
 
-    private final String accountName = "YOUR_ACCOUNT_NAME";
+    private static final String accountName = "YOUR_ACCOUNT_NAME";
+    private static final PrivateKey key = new PrivateKey("YOUR_PRIVATE_KEY");
 
     private ScatterClient scatterClient = new ScatterClient() {
-        @Override
-        public void getAccount(AccountReceived onAccountReceived) {
+        void getAccount(AccountReceived onAccountReceived) {
             Log.d(TAG, "getAccount");
             onAccountReceived.onAccountReceivedCallback(accountName);
+        }
+
+        void completeTransaction(TransactionCompleted onTransactionCompleted) {
+            Log.d(TAG, "completeTransaction");
+            onTransactionCompleted.onTransactionCompletedCallback(key);
+        }
+
+        void completeMsgTransaction(TransactionMsgCompleted onTransactionCompleted) {
+            Log.d(TAG, "completeMsgTransaction");
+            onTransactionCompleted.onTransactionCompletedCallback(key);
         }
     };
 
@@ -45,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         scatterImplementation.initInterface();
 
         webView.loadUrl("https://eostowergame.com");
+
     }
 
     @Override
