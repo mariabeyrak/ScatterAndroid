@@ -25,19 +25,22 @@ public class MainActivity extends AppCompatActivity {
     private static final PrivateKey key = new PrivateKey("YOUR_PRIVATE_KEY");
 
     private ScatterClient scatterClient = new ScatterClient() {
-        void getAccount(AccountReceived onAccountReceived) {
+        @Override
+        public void getAccount(AccountReceived onAccountReceived) {
             Log.d(TAG, "getAccount");
             onAccountReceived.onAccountReceivedCallback(accountName);
         }
 
-        void completeTransaction(TransactionRequestParams transactionRequestParams, TransactionCompleted onTransactionCompleted) {
+        @Override
+        public void completeTransaction(TransactionRequestParams transactionRequestParams, TransactionCompleted onTransactionCompleted) {
             Log.d(TAG, "completeTransaction");
             onTransactionCompleted.onTransactionCompletedCallback(key);
         }
 
-        void completeMsgTransaction(MsgTransactionRequestParams params, TransactionMsgCompleted onTransactionCompleted) {
+        @Override
+        public void completeMsgTransaction(MsgTransactionRequestParams params, TransactionMsgCompleted onTransactionCompleted) {
             Log.d(TAG, "completeMsgTransaction");
-            onTransactionCompleted.onTransactionCompletedCallback(key);
+            onTransactionCompleted.onTransactionMsgCompletedCallback(key);
         }
     };
 

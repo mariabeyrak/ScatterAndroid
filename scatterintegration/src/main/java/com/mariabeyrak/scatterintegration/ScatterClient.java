@@ -18,17 +18,17 @@ public abstract class ScatterClient {
     }
 
     public interface TransactionMsgCompleted {
-        void onTransactionCompletedCallback(PrivateKey key);
+        void onTransactionMsgCompletedCallback(PrivateKey key);
 
-        void onTransactionCompletedErrorCallback(Error error);
+        void onTransactionMsgCompletedErrorCallback(Error error);
     }
 
-    void getAccount(AccountReceived onAccountReceived) {
+    public void getAccount(AccountReceived onAccountReceived) {
     }
 
-    void completeTransaction(TransactionRequestParams transactionRequestParams, TransactionCompleted onTransactionCompleted) {
+    public void completeTransaction(TransactionRequestParams transactionRequestParams, TransactionCompleted onTransactionCompleted) {
     }
 
-    void completeMsgTransaction(MsgTransactionRequestParams data, TransactionMsgCompleted onTransactionMsgCompleted) {
+    public void completeMsgTransaction(MsgTransactionRequestParams data, TransactionMsgCompleted onTransactionMsgCompleted) {
     }
 }
