@@ -13,13 +13,11 @@ public abstract class ScatterClient {
 
     public interface TransactionCompleted {
         void onTransactionCompletedCallback(PrivateKey key);
-
         void onTransactionCompletedErrorCallback(Error error);
     }
 
     public interface TransactionMsgCompleted {
         void onTransactionMsgCompletedCallback(PrivateKey key);
-
         void onTransactionMsgCompletedErrorCallback(Error error);
     }
 

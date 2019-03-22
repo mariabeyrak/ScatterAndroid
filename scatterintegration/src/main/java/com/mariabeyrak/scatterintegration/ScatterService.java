@@ -74,7 +74,7 @@ final class ScatterService {
 
         ScatterClient.TransactionMsgCompleted msgTransactionCompleted = new ScatterClient.TransactionMsgCompleted() {
             @Override
-            public void onTransactionCompletedCallback(PrivateKey key) {
+            public void onTransactionMsgCompletedCallback(PrivateKey key) {
                 final Signature signature = Eos.signTransactionRaw(Hex.decode(msgTransactionRequestParams.getData()), key);
                 String responseData = gson.toJson(signature.toString());
                 String script = new ScatterResponse(MethodName.RequestMsgSignature.getMethod(), ResponseCodeInfo.SUCCESS, responseData).formatResponse();
@@ -82,9 +82,10 @@ final class ScatterService {
             }
 
             @Override
-            public void onTransactionCompletedErrorCallback(Error error) {
+            public void onTransactionMsgCompletedErrorCallback(Error error) {
 
             }
+
         };
 
         scatterClient.completeMsgTransaction(msgTransactionRequestParams, msgTransactionCompleted);
