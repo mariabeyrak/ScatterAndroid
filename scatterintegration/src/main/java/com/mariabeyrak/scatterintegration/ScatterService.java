@@ -66,7 +66,7 @@ final class ScatterService {
             }
         };
 
-        scatterClient.completeTransaction(transactionCompleted);
+        scatterClient.completeTransaction(transactionRequestParams, transactionCompleted);
     }
 
     static void requestMsgSignature(String data, final WebView webView, ScatterClient scatterClient) {
@@ -87,7 +87,7 @@ final class ScatterService {
             }
         };
 
-        scatterClient.completeMsgTransaction(msgTransactionCompleted);
+        scatterClient.completeMsgTransaction(msgTransactionRequestParams, msgTransactionCompleted);
     }
 
 

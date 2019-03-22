@@ -12,6 +12,8 @@ import android.webkit.WebViewClient;
 
 import com.mariabeyrak.scatterintegration.Scatter;
 import com.mariabeyrak.scatterintegration.ScatterClient;
+import com.mariabeyrak.scatterintegration.models.requests.MsgTransaction.MsgTransactionRequestParams;
+import com.mariabeyrak.scatterintegration.models.requests.Transaction.request.TransactionRequestParams;
 import com.paytomat.eos.PrivateKey;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
             onAccountReceived.onAccountReceivedCallback(accountName);
         }
 
-        void completeTransaction(TransactionCompleted onTransactionCompleted) {
+        void completeTransaction(TransactionRequestParams transactionRequestParams, TransactionCompleted onTransactionCompleted) {
             Log.d(TAG, "completeTransaction");
             onTransactionCompleted.onTransactionCompletedCallback(key);
         }
 
-        void completeMsgTransaction(TransactionMsgCompleted onTransactionCompleted) {
+        void completeMsgTransaction(MsgTransactionRequestParams params, TransactionMsgCompleted onTransactionCompleted) {
             Log.d(TAG, "completeMsgTransaction");
             onTransactionCompleted.onTransactionCompletedCallback(key);
         }
@@ -56,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         scatterImplementation.initInterface();
 
         webView.loadUrl("https://eostowergame.com");
-
     }
 
     @Override
