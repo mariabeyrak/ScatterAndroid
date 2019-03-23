@@ -1,7 +1,8 @@
 package com.mariabeyrak.scatterintegration.models;
 
 public enum ResponseCodeInfo {
-    SUCCESS("success", 0);
+    SUCCESS("success", 0),
+    ERROR("error", 1);
 
     private String message;
     private Integer code;

@@ -28,8 +28,6 @@ class ScatterWebInterface {
 
         Gson gson = new Gson();
         ScatterRequest scatterRequest = gson.fromJson(data, ScatterRequest.class);
-        Log.d(TAG, "scatterRequest: " + scatterRequest.toString());
-
 
         switch (scatterRequest.getMethodName()) {
             case GetEosAccount: {

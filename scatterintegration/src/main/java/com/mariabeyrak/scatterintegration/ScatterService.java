@@ -16,8 +16,6 @@ import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.T
 import com.paytomat.eos.Eos;
 import com.paytomat.eos.PrivateKey;
 import com.paytomat.eos.signature.Signature;
-import com.paytomat.eos.transaction.EosPackedTransaction;
-import com.paytomat.eos.transaction.EosTransaction;
 
 import org.bouncycastle.util.encoders.Hex;
 
@@ -31,14 +29,13 @@ final class ScatterService {
     static void getEosAccount(final WebView webView, ScatterClient scatterClient) {
         ScatterClient.AccountReceived accountReceived = new ScatterClient.AccountReceived() {
             @Override
-            public void onAccountReceivedCallback(String accountName) {
+            public void onAccountReceivedSuccessCallback(String accountName) {
                 String script = new ScatterResponse(MethodName.GetEosAccount.getMethod(), ResponseCodeInfo.SUCCESS, gson.toJson(accountName)).formatResponse();
                 injectJs(webView, script);
             }
 
             @Override
             public void onAccountReceivedErrorCallback(Error error) {
-
             }
         };
 
@@ -50,11 +47,8 @@ final class ScatterService {
 
         ScatterClient.TransactionCompleted transactionCompleted = new ScatterClient.TransactionCompleted() {
             @Override
-            public void onTransactionCompletedCallback(PrivateKey key) {
-                EosTransaction transaction = transactionRequestParams.toEosTransaction(key);
-                EosPackedTransaction packedTransaction = transaction.getPackedTx();
-
-                final String[] signatures = packedTransaction.getSignatures();
+            public void onTransactionCompletedSuccessCallback(PrivateKey key) {
+                String[] signatures = transactionRequestParams.toEosTransaction(key).getPackedTx().getSignatures();
                 String responseData = gson.toJson(new TransactionResponseData(new SignData(signatures, new ReturnedFields())));
                 String script = new ScatterResponse(MethodName.RequestSignature.getMethod(), ResponseCodeInfo.SUCCESS, responseData).formatResponse();
                 injectJs(webView, script);
@@ -62,7 +56,7 @@ final class ScatterService {
 
             @Override
             public void onTransactionCompletedErrorCallback(Error error) {
-
+                sendErrorScript(webView, MethodName.RequestSignature);
             }
         };
 
@@ -72,9 +66,9 @@ final class ScatterService {
     static void requestMsgSignature(String data, final WebView webView, ScatterClient scatterClient) {
         final MsgTransactionRequestParams msgTransactionRequestParams = gson.fromJson(data, MsgTransactionRequestParams.class);
 
-        ScatterClient.TransactionMsgCompleted msgTransactionCompleted = new ScatterClient.TransactionMsgCompleted() {
+        ScatterClient.TransactionCompleted msgTransactionCompleted = new ScatterClient.TransactionCompleted() {
             @Override
-            public void onTransactionMsgCompletedCallback(PrivateKey key) {
+            public void onTransactionCompletedSuccessCallback(PrivateKey key) {
                 final Signature signature = Eos.signTransactionRaw(Hex.decode(msgTransactionRequestParams.getData()), key);
                 String responseData = gson.toJson(signature.toString());
                 String script = new ScatterResponse(MethodName.RequestMsgSignature.getMethod(), ResponseCodeInfo.SUCCESS, responseData).formatResponse();
@@ -82,15 +76,17 @@ final class ScatterService {
             }
 
             @Override
-            public void onTransactionMsgCompletedErrorCallback(Error error) {
-
+            public void onTransactionCompletedErrorCallback(Error error) {
+                sendErrorScript(webView, MethodName.RequestMsgSignature);
             }
-
         };
 
         scatterClient.completeMsgTransaction(msgTransactionRequestParams, msgTransactionCompleted);
     }
 
+    private static void sendErrorScript(WebView webView, MethodName methodName) {
+        injectJs(webView, new ScatterResponse(methodName.getMethod(), ResponseCodeInfo.ERROR, "\"\"").formatResponse());
+    }
 
     static void injectJs(final WebView webView, final String script) {
         webView.post(new Runnable() {

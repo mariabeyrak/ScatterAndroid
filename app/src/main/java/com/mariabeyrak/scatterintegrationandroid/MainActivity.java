@@ -28,19 +28,19 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void getAccount(AccountReceived onAccountReceived) {
             Log.d(TAG, "getAccount");
-            onAccountReceived.onAccountReceivedCallback(accountName);
+            onAccountReceived.onAccountReceivedSuccessCallback(accountName);
         }
 
         @Override
         public void completeTransaction(TransactionRequestParams transactionRequestParams, TransactionCompleted onTransactionCompleted) {
             Log.d(TAG, "completeTransaction");
-            onTransactionCompleted.onTransactionCompletedCallback(key);
+            onTransactionCompleted.onTransactionCompletedSuccessCallback(key);
         }
 
         @Override
-        public void completeMsgTransaction(MsgTransactionRequestParams params, TransactionMsgCompleted onTransactionCompleted) {
+        public void completeMsgTransaction(MsgTransactionRequestParams params, TransactionCompleted onTransactionCompleted) {
             Log.d(TAG, "completeMsgTransaction");
-            onTransactionCompleted.onTransactionMsgCompletedCallback(key);
+            onTransactionCompleted.onTransactionCompletedSuccessCallback(key);
         }
     };
 
