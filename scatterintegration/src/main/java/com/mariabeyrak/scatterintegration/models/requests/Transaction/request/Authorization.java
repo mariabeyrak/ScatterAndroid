@@ -1,7 +1,7 @@
 package com.mariabeyrak.scatterintegration.models.requests.Transaction.request;
 
-import com.paytomat.eos.transaction.EosActionAuthorization;
-import com.paytomat.eos.transaction.EosActionAuthorizationPermission;
+import com.mariabeyrak.scatterintegration.models.core.transaction.EosActionAuthorization;
+import com.mariabeyrak.scatterintegration.models.core.transaction.EosActionAuthorizationPermission;
 
 public class Authorization {
 
@@ -13,7 +13,7 @@ public class Authorization {
         this.permission = permission;
     }
 
-    public EosActionAuthorization toEosActionAuthorization() {
+    EosActionAuthorization toEosActionAuthorization() {
         return new EosActionAuthorization(actor, getEosActionAuthorizationPermissionByValue(permission));
     }
 

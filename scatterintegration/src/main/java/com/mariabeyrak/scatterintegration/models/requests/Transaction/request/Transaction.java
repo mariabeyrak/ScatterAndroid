@@ -1,7 +1,7 @@
 package com.mariabeyrak.scatterintegration.models.requests.Transaction.request;
 
 import com.google.gson.annotations.SerializedName;
-import com.paytomat.eos.transaction.EosAction;
+import com.mariabeyrak.scatterintegration.models.core.transaction.EosAction;
 
 public class Transaction {
     private String expiration;
@@ -30,7 +30,7 @@ public class Transaction {
         this.actions = actions;
     }
 
-    public EosAction[] getEosActions() {
+    EosAction[] getEosActions() {
         EosAction[] array = new EosAction[actions.length];
         for (int i = 0; i < actions.length; i++) {
             array[i] = actions[i].toEosAction();

@@ -1,10 +1,9 @@
 package com.mariabeyrak.scatterintegration.models.requests.Transaction.request;
 
-import com.mariabeyrak.scatterintegration.models.requests.ScatterRequestParams;
-import com.paytomat.eos.PrivateKey;
-import com.paytomat.eos.transaction.EosAction;
-import com.paytomat.eos.transaction.EosExtentionType;
-import com.paytomat.eos.transaction.EosTransaction;
+import com.mariabeyrak.scatterintegration.models.core.key.PrivateKey;
+import com.mariabeyrak.scatterintegration.models.core.transaction.EosAction;
+import com.mariabeyrak.scatterintegration.models.core.transaction.EosExtentionType;
+import com.mariabeyrak.scatterintegration.models.core.transaction.EosTransaction;
 
 import org.bouncycastle.util.encoders.Hex;
 
@@ -13,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class TransactionRequestParams extends ScatterRequestParams {
+public class TransactionRequestParams {
     private Transaction transaction;
     private Buf buf;
 

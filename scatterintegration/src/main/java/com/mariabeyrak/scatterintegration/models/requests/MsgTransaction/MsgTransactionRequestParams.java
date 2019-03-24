@@ -1,8 +1,6 @@
 package com.mariabeyrak.scatterintegration.models.requests.MsgTransaction;
 
-import com.mariabeyrak.scatterintegration.models.requests.ScatterRequestParams;
-
-public class MsgTransactionRequestParams extends ScatterRequestParams {
+public class MsgTransactionRequestParams {
     private String data;
     private String publicKey;
     private String isHash;

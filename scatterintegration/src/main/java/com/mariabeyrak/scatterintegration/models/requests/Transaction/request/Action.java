@@ -2,8 +2,8 @@ package com.mariabeyrak.scatterintegration.models.requests.Transaction.request;
 
 import android.util.Log;
 
-import com.paytomat.eos.transaction.EosAction;
-import com.paytomat.eos.transaction.EosActionAuthorization;
+import com.mariabeyrak.scatterintegration.models.core.transaction.EosAction;
+import com.mariabeyrak.scatterintegration.models.core.transaction.EosActionAuthorization;
 
 import org.bouncycastle.util.encoders.Hex;
 
@@ -21,7 +21,7 @@ public class Action {
         this.data = data;
     }
 
-    public EosAction toEosAction() {
+    EosAction toEosAction() {
         Log.d("<<SS", "toEosAction data: " + data);
         return new EosAction(account, name, getEosActionAuthorization(), Hex.decode(data));
     }

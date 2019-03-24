@@ -8,14 +8,14 @@ import com.google.gson.Gson;
 import com.mariabeyrak.scatterintegration.models.MethodName;
 import com.mariabeyrak.scatterintegration.models.ResponseCodeInfo;
 import com.mariabeyrak.scatterintegration.models.ScatterResponse;
+import com.mariabeyrak.scatterintegration.models.core.key.PrivateKey;
+import com.mariabeyrak.scatterintegration.models.core.signature.Signature;
 import com.mariabeyrak.scatterintegration.models.requests.MsgTransaction.MsgTransactionRequestParams;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.request.TransactionRequestParams;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.ReturnedFields;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.SignData;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.TransactionResponseData;
-import com.paytomat.eos.Eos;
-import com.paytomat.eos.PrivateKey;
-import com.paytomat.eos.signature.Signature;
+import com.mariabeyrak.scatterintegration.util.EosUtils;
 
 import org.bouncycastle.util.encoders.Hex;
 
@@ -73,7 +73,7 @@ final class ScatterService {
         ScatterClient.TransactionCompleted msgTransactionCompleted = new ScatterClient.TransactionCompleted() {
             @Override
             public void onTransactionCompletedSuccessCallback(String key) {
-                final Signature signature = Eos.signTransactionRaw(Hex.decode(msgTransactionRequestParams.getData()), new PrivateKey(key));
+                final Signature signature = EosUtils.signTransactionRaw(Hex.decode(msgTransactionRequestParams.getData()), new PrivateKey(key));
                 String responseData = gson.toJson(signature.toString());
                 String script = new ScatterResponse(REQUEST_MSG_SIGNATURE, ResponseCodeInfo.SUCCESS, responseData).formatResponse();
                 injectJs(webView, script);
