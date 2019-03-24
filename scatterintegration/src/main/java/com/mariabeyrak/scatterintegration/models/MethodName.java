@@ -1,22 +1,17 @@
 package com.mariabeyrak.scatterintegration.models;
 
-import com.google.gson.annotations.SerializedName;
+import android.support.annotation.StringDef;
 
-public enum MethodName {
-    @SerializedName("callbackGetEosAccount")
-    GetEosAccount("callbackGetEosAccount"),
-    @SerializedName("callbackRequestSignature")
-    RequestSignature("callbackRequestSignature"),
-    @SerializedName("callbackRequestMsgSignature")
-    RequestMsgSignature("callbackRequestMsgSignature");
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-    private String method;
+public class MethodName {
+    public static final String GET_EOS_ACCOUNT = "callbackGetEosAccount";
+    public static final String REQUEST_SIGNATURE = "callbackRequestSignature";
+    public static final String REQUEST_MSG_SIGNATURE = "callbackRequestMsgSignature";
 
-    MethodName(String method) {
-        this.method = method;
-    }
-
-    public String getMethod() {
-        return method;
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef({GET_EOS_ACCOUNT, REQUEST_SIGNATURE, REQUEST_MSG_SIGNATURE})
+    public @interface Methods {
     }
 }

@@ -10,6 +10,9 @@ import com.mariabeyrak.scatterintegration.models.ScatterRequest;
 import static com.mariabeyrak.scatterintegration.ScatterService.getEosAccount;
 import static com.mariabeyrak.scatterintegration.ScatterService.requestMsgSignature;
 import static com.mariabeyrak.scatterintegration.ScatterService.requestSignature;
+import static com.mariabeyrak.scatterintegration.models.MethodName.GET_EOS_ACCOUNT;
+import static com.mariabeyrak.scatterintegration.models.MethodName.REQUEST_MSG_SIGNATURE;
+import static com.mariabeyrak.scatterintegration.models.MethodName.REQUEST_SIGNATURE;
 
 class ScatterWebInterface {
     private static String TAG = "<<SS";
@@ -30,15 +33,15 @@ class ScatterWebInterface {
         ScatterRequest scatterRequest = gson.fromJson(data, ScatterRequest.class);
 
         switch (scatterRequest.getMethodName()) {
-            case GetEosAccount: {
+            case GET_EOS_ACCOUNT: {
                 getEosAccount(webView, scatterClient);
                 break;
             }
-            case RequestSignature: {
+            case REQUEST_SIGNATURE: {
                 requestSignature(scatterRequest.getParams(), webView, scatterClient);
                 break;
             }
-            case RequestMsgSignature: {
+            case REQUEST_MSG_SIGNATURE: {
                 requestMsgSignature(scatterRequest.getParams(), webView, scatterClient);
                 break;
             }

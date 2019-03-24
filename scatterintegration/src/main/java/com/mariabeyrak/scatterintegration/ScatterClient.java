@@ -2,7 +2,6 @@ package com.mariabeyrak.scatterintegration;
 
 import com.mariabeyrak.scatterintegration.models.requests.MsgTransaction.MsgTransactionRequestParams;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.request.TransactionRequestParams;
-import com.paytomat.eos.PrivateKey;
 
 public abstract class ScatterClient {
 
@@ -12,7 +11,7 @@ public abstract class ScatterClient {
     }
 
     public interface TransactionCompleted {
-        void onTransactionCompletedSuccessCallback(PrivateKey key);
+        void onTransactionCompletedSuccessCallback(String privateKey);
         void onTransactionCompletedErrorCallback(Error error);
     }
 

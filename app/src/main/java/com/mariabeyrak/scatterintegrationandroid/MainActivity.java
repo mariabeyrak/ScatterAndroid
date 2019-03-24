@@ -14,7 +14,6 @@ import com.mariabeyrak.scatterintegration.Scatter;
 import com.mariabeyrak.scatterintegration.ScatterClient;
 import com.mariabeyrak.scatterintegration.models.requests.MsgTransaction.MsgTransactionRequestParams;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.request.TransactionRequestParams;
-import com.paytomat.eos.PrivateKey;
 
 public class MainActivity extends AppCompatActivity {
     private static String TAG = "<<SS";
@@ -22,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private Scatter scatterImplementation;
 
     private static final String accountName = "YOUR_ACCOUNT_NAME";
-    private static final PrivateKey key = new PrivateKey("YOUR_PRIVATE_KEY");
+    private static final String key = "YOUR_PRIVATE_KEY";
 
     private ScatterClient scatterClient = new ScatterClient() {
         @Override

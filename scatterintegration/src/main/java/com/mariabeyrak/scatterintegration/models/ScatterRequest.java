@@ -2,9 +2,10 @@ package com.mariabeyrak.scatterintegration.models;
 
 public class ScatterRequest {
     private String params;
-    private MethodName methodName;
+    private @MethodName.Methods
+    String methodName;
 
-    public ScatterRequest(String params, MethodName methodName) {
+    public ScatterRequest(String params, @MethodName.Methods String methodName) {
         this.params = params;
         this.methodName = methodName;
     }
@@ -13,7 +14,8 @@ public class ScatterRequest {
         return params;
     }
 
-    public MethodName getMethodName() {
+    public @MethodName.Methods
+    String getMethodName() {
         return methodName;
     }
 
@@ -21,7 +23,7 @@ public class ScatterRequest {
     public String toString() {
         return "ScatterRequest{" +
                 "params='" + params + '\'' +
-                ", methodName='" + methodName.getMethod() + '\'' +
+                ", methodName='" + methodName + '\'' +
                 '}';
     }
 }
