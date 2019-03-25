@@ -11,7 +11,7 @@ public abstract class ScatterClient {
     }
 
     public interface TransactionCompleted {
-        void onTransactionCompletedSuccessCallback(String privateKey);
+        void onTransactionCompletedSuccessCallback(String response);
         void onTransactionCompletedErrorCallback(Error error);
     }
 

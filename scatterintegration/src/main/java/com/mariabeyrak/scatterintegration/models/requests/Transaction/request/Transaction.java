@@ -1,7 +1,6 @@
 package com.mariabeyrak.scatterintegration.models.requests.Transaction.request;
 
 import com.google.gson.annotations.SerializedName;
-import com.mariabeyrak.scatterintegration.models.core.transaction.EosAction;
 
 public class Transaction {
     private String expiration;
@@ -28,14 +27,6 @@ public class Transaction {
         this.delaySec = delaySec;
         this.contextFreeActions = contextFreeActions;
         this.actions = actions;
-    }
-
-    EosAction[] getEosActions() {
-        EosAction[] array = new EosAction[actions.length];
-        for (int i = 0; i < actions.length; i++) {
-            array[i] = actions[i].toEosAction();
-        }
-        return array;
     }
 
     public String getExpiration() {

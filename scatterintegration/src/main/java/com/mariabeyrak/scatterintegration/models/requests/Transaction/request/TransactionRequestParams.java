@@ -1,12 +1,5 @@
 package com.mariabeyrak.scatterintegration.models.requests.Transaction.request;
 
-import com.mariabeyrak.scatterintegration.models.core.key.PrivateKey;
-import com.mariabeyrak.scatterintegration.models.core.transaction.EosAction;
-import com.mariabeyrak.scatterintegration.models.core.transaction.EosExtentionType;
-import com.mariabeyrak.scatterintegration.models.core.transaction.EosTransaction;
-
-import org.bouncycastle.util.encoders.Hex;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,7 +17,7 @@ public class TransactionRequestParams {
         this.buf = buf;
     }
 
-    private long getEstimatedInSeconds() {
+    public long getEstimatedInSeconds() {
         try {
             Date date = DATE_FORMAT.parse(transaction.getExpiration());
 
@@ -35,21 +28,6 @@ public class TransactionRequestParams {
         } catch (ParseException e) {
             return 0;
         }
-    }
-
-    private String getChainIdHex() {
-        byte[] byteArray = new byte[32];
-        System.arraycopy(buf.getData(), 0, byteArray, 0, 32);
-        return Hex.toHexString(byteArray);
-    }
-
-    public EosTransaction toEosTransaction(PrivateKey privateKey) {
-        return new EosTransaction(
-                privateKey, this.getChainIdHex(), getEstimatedInSeconds(),
-                (short) transaction.getRefBlockNum(), (int) transaction.getRefBlockPrefix(),
-                transaction.getMaxNetUsageWords(), (byte) transaction.getMaxCpuUsageMs(),
-                transaction.getDelaySec(), new EosAction[]{}, transaction.getEosActions(), new EosExtentionType[]{}
-        );
     }
 
     public Transaction getTransaction() {

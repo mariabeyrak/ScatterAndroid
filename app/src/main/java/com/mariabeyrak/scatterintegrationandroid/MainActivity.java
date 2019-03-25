@@ -10,10 +10,21 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.google.gson.Gson;
 import com.mariabeyrak.scatterintegration.Scatter;
 import com.mariabeyrak.scatterintegration.ScatterClient;
 import com.mariabeyrak.scatterintegration.models.requests.MsgTransaction.MsgTransactionRequestParams;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.request.TransactionRequestParams;
+import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.ReturnedFields;
+import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.SignData;
+import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.TransactionResponseData;
+import com.paytomat.eos.Eos;
+import com.paytomat.eos.PrivateKey;
+import com.paytomat.eos.signature.Signature;
+
+import org.bouncycastle.util.encoders.Hex;
+
+import static com.mariabeyrak.scatterintegrationandroid.ScatterHelper.toEosTransaction;
 
 public class MainActivity extends AppCompatActivity {
     private static String TAG = "<<SS";
@@ -22,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String accountName = "YOUR_ACCOUNT_NAME";
     private static final String key = "YOUR_PRIVATE_KEY";
+
+    final private static Gson gson = new Gson();
 
     private ScatterClient scatterClient = new ScatterClient() {
         @Override
@@ -33,13 +46,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void completeTransaction(TransactionRequestParams transactionRequestParams, TransactionCompleted onTransactionCompleted) {
             Log.d(TAG, "completeTransaction");
-            onTransactionCompleted.onTransactionCompletedSuccessCallback(key);
+            String[] signatures = toEosTransaction(transactionRequestParams, new PrivateKey(key)).getPackedTx().getSignatures();
+            String response = gson.toJson(new TransactionResponseData(new SignData(signatures, new ReturnedFields())));
+            onTransactionCompleted.onTransactionCompletedSuccessCallback(response);
         }
 
         @Override
         public void completeMsgTransaction(MsgTransactionRequestParams params, TransactionCompleted onTransactionCompleted) {
             Log.d(TAG, "completeMsgTransaction");
-            onTransactionCompleted.onTransactionCompletedSuccessCallback(key);
+            Signature signature = Eos.signTransactionRaw(Hex.decode(params.getData()), new PrivateKey(key));
+            onTransactionCompleted.onTransactionCompletedSuccessCallback(signature.toString());
         }
     };
 
