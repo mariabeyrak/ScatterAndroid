@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
 
         webView.setWebViewClient(new ScatterWebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
-        scatterImplementation.initInterface();
 
         webView.loadUrl("https://eostowergame.com");
     }

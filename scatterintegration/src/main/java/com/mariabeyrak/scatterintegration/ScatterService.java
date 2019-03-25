@@ -19,8 +19,6 @@ import com.mariabeyrak.scatterintegration.util.EosUtils;
 
 import org.bouncycastle.util.encoders.Hex;
 
-import static com.mariabeyrak.scatterintegration.models.MethodName.GET_EOS_ACCOUNT;
-import static com.mariabeyrak.scatterintegration.models.MethodName.REQUEST_MSG_SIGNATURE;
 import static com.mariabeyrak.scatterintegration.models.MethodName.REQUEST_SIGNATURE;
 
 final class ScatterService {
@@ -34,8 +32,7 @@ final class ScatterService {
         ScatterClient.AccountReceived accountReceived = new ScatterClient.AccountReceived() {
             @Override
             public void onAccountReceivedSuccessCallback(String accountName) {
-                String script = new ScatterResponse(GET_EOS_ACCOUNT, ResponseCodeInfo.SUCCESS, gson.toJson(accountName)).formatResponse();
-                injectJs(webView, script);
+                sendSuccessScript(webView, MethodName.GET_EOS_ACCOUNT, gson.toJson(accountName));
             }
 
             @Override
@@ -53,9 +50,8 @@ final class ScatterService {
             @Override
             public void onTransactionCompletedSuccessCallback(String key) {
                 String[] signatures = transactionRequestParams.toEosTransaction(new PrivateKey(key)).getPackedTx().getSignatures();
-                String responseData = gson.toJson(new TransactionResponseData(new SignData(signatures, new ReturnedFields())));
-                String script = new ScatterResponse(REQUEST_SIGNATURE, ResponseCodeInfo.SUCCESS, responseData).formatResponse();
-                injectJs(webView, script);
+                sendSuccessScript(webView, MethodName.REQUEST_SIGNATURE,
+                        gson.toJson(new TransactionResponseData(new SignData(signatures, new ReturnedFields()))));
             }
 
             @Override
@@ -74,9 +70,7 @@ final class ScatterService {
             @Override
             public void onTransactionCompletedSuccessCallback(String key) {
                 final Signature signature = EosUtils.signTransactionRaw(Hex.decode(msgTransactionRequestParams.getData()), new PrivateKey(key));
-                String responseData = gson.toJson(signature.toString());
-                String script = new ScatterResponse(REQUEST_MSG_SIGNATURE, ResponseCodeInfo.SUCCESS, responseData).formatResponse();
-                injectJs(webView, script);
+                sendSuccessScript(webView, MethodName.REQUEST_MSG_SIGNATURE, gson.toJson(signature.toString()));
             }
 
             @Override
@@ -86,6 +80,10 @@ final class ScatterService {
         };
 
         scatterClient.completeMsgTransaction(msgTransactionRequestParams, msgTransactionCompleted);
+    }
+
+    private static void sendSuccessScript(WebView webView, @MethodName.Methods String methodName, String responseData) {
+        injectJs(webView, new ScatterResponse(methodName, ResponseCodeInfo.SUCCESS, responseData).formatResponse());
     }
 
     private static void sendErrorScript(WebView webView, @MethodName.Methods String methodName) {

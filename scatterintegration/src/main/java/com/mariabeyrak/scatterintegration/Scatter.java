@@ -4,6 +4,7 @@ import android.util.Log;
 import android.webkit.WebView;
 
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.Scanner;
 
 import static com.mariabeyrak.scatterintegration.ScatterService.injectJs;
@@ -12,41 +13,48 @@ public class Scatter {
     private static String TAG = "<<SS";
     private String javascriptInterfaceName = "WebView";
 
-    private WebView webView;
+    private WeakReference<WebView> webView;
     private ScatterClient scatterClient;
 
     public Scatter(WebView webView, ScatterClient scatterClient) {
-        this.webView = webView;
+        this.webView = new WeakReference<>(webView);
         this.scatterClient = scatterClient;
+        initInterface();
     }
 
-    public void initInterface() {
-        webView.addJavascriptInterface(new ScatterWebInterface(webView, scatterClient), javascriptInterfaceName);
+    private void initInterface() {
+        if (webView.get() != null) {
+            webView.get().addJavascriptInterface(new ScatterWebInterface(webView.get(), scatterClient), javascriptInterfaceName);
+        }
     }
 
     public void injectJS() {
         try {
-            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("assets/scatterkit_script.js");
+            if (webView.get() != null) {
+                InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("assets/scatterkit_script.js");
 
-            Scanner s = new Scanner(inputStream).useDelimiter("\\A");
-            String jsScript = s.hasNext() ? s.next() : "";
+                Scanner s = new Scanner(inputStream).useDelimiter("\\A");
+                String jsScript = s.hasNext() ? s.next() : "";
 
-            final String script = new StringBuilder().append("var SP_SCRIPT = document.createElement('script');\n")
-                    .append("var SP_USER_AGENT_ANDROID = \"").append(webView.getSettings().getUserAgentString()).append("\";\n")
-                    .append("var SP_USER_AGENT_IOS = \"SP_USER_AGENT_IOS\";\n")
-                    .append("var SP_TIMEOUT = ").append(60 * 1000).append(";\n")
-                    .append("SP_SCRIPT.type = 'text/javascript';\n")
-                    .append("SP_SCRIPT.text = \"")
-                    .append(jsScript)
-                    .append("\";document.getElementsByTagName('head')[0].appendChild(SP_SCRIPT);").toString();
+                final String script = new StringBuilder().append("var SP_SCRIPT = document.createElement('script');\n")
+                        .append("var SP_USER_AGENT_ANDROID = \"").append(webView.get().getSettings().getUserAgentString()).append("\";\n")
+                        .append("var SP_USER_AGENT_IOS = \"SP_USER_AGENT_IOS\";\n")
+                        .append("var SP_TIMEOUT = ").append(60 * 1000).append(";\n")
+                        .append("SP_SCRIPT.type = 'text/javascript';\n")
+                        .append("SP_SCRIPT.text = \"")
+                        .append(jsScript)
+                        .append("\";document.getElementsByTagName('head')[0].appendChild(SP_SCRIPT);").toString();
 
-            injectJs(webView, script);
+                injectJs(webView.get(), script);
+            }
         } catch (Exception e) {
-            Log.d(TAG, "Scatter js file not founded");
+            Log.d(TAG, "Some error with Scatter js file");
         }
     }
 
     public void removeInterface() {
-        webView.removeJavascriptInterface(javascriptInterfaceName);
+        if (webView.get() != null) {
+            webView.get().removeJavascriptInterface(javascriptInterfaceName);
+        }
     }
 }
