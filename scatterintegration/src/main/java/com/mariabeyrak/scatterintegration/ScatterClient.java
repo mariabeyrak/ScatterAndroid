@@ -5,6 +5,12 @@ import com.mariabeyrak.scatterintegration.models.requests.Transaction.request.Tr
 
 public abstract class ScatterClient {
 
+    public interface AppInfoReceived {
+        void onAppInfoReceivedSuccessCallback(String appName, String appVersion);
+
+        void onAccountReceivedErrorCallback(Error error);
+    }
+
     public interface AccountReceived {
         void onAccountReceivedSuccessCallback(String accountName);
         void onAccountReceivedErrorCallback(Error error);
@@ -17,8 +23,10 @@ public abstract class ScatterClient {
 
     public interface MsgTransactionCompleted {
         void onMsgTransactionCompletedSuccessCallback(String signature);
-
         void onMsgTransactionCompletedErrorCallback(Error error);
+    }
+
+    public void getAppInfo(AppInfoReceived onAppInfoReceived) {
     }
 
     public void getAccount(AccountReceived onAccountReceived) {

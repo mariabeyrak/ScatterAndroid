@@ -6,8 +6,10 @@ import android.webkit.WebView;
 
 import com.google.gson.Gson;
 import com.mariabeyrak.scatterintegration.models.MethodName;
+import com.mariabeyrak.scatterintegration.models.ProtocolInfo;
 import com.mariabeyrak.scatterintegration.models.ResponseCodeInfo;
 import com.mariabeyrak.scatterintegration.models.ScatterResponse;
+import com.mariabeyrak.scatterintegration.models.requests.AppInfo.AppInfoResponseData;
 import com.mariabeyrak.scatterintegration.models.requests.MsgTransaction.MsgTransactionRequestParams;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.request.TransactionRequestParams;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.ReturnedFields;
@@ -23,6 +25,22 @@ final class ScatterService {
     final static private Gson gson = new Gson();
 
     private ScatterService() {
+    }
+
+    static void getAppInfo(final WebView webView, ScatterClient scatterClient) {
+        ScatterClient.AppInfoReceived appInfoReceived = new ScatterClient.AppInfoReceived() {
+            @Override
+            public void onAppInfoReceivedSuccessCallback(String appName, String appVersion) {
+                AppInfoResponseData responseData = new AppInfoResponseData(appName, appVersion, ProtocolInfo.name, ProtocolInfo.version);
+                sendSuccessScript(webView, GET_EOS_ACCOUNT, gson.toJson(responseData));
+            }
+
+            @Override
+            public void onAccountReceivedErrorCallback(Error error) {
+            }
+        };
+
+        scatterClient.getAppInfo(appInfoReceived);
     }
 
     static void getEosAccount(final WebView webView, ScatterClient scatterClient) {

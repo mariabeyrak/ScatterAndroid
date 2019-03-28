@@ -7,9 +7,11 @@ import android.webkit.WebView;
 import com.google.gson.Gson;
 import com.mariabeyrak.scatterintegration.models.ScatterRequest;
 
+import static com.mariabeyrak.scatterintegration.ScatterService.getAppInfo;
 import static com.mariabeyrak.scatterintegration.ScatterService.getEosAccount;
 import static com.mariabeyrak.scatterintegration.ScatterService.requestMsgSignature;
 import static com.mariabeyrak.scatterintegration.ScatterService.requestSignature;
+import static com.mariabeyrak.scatterintegration.models.MethodName.GET_APP_INFO;
 import static com.mariabeyrak.scatterintegration.models.MethodName.GET_EOS_ACCOUNT;
 import static com.mariabeyrak.scatterintegration.models.MethodName.REQUEST_MSG_SIGNATURE;
 import static com.mariabeyrak.scatterintegration.models.MethodName.REQUEST_SIGNATURE;
@@ -33,6 +35,10 @@ class ScatterWebInterface {
         ScatterRequest scatterRequest = gson.fromJson(data, ScatterRequest.class);
 
         switch (scatterRequest.getMethodName()) {
+            case GET_APP_INFO: {
+                getAppInfo(webView, scatterClient);
+                break;
+            }
             case GET_EOS_ACCOUNT: {
                 getEosAccount(webView, scatterClient);
                 break;
