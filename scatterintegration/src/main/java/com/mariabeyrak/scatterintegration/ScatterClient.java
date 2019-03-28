@@ -11,8 +11,14 @@ public abstract class ScatterClient {
     }
 
     public interface TransactionCompleted {
-        void onTransactionCompletedSuccessCallback(String response);
+        void onTransactionCompletedSuccessCallback(String[] signatures);
         void onTransactionCompletedErrorCallback(Error error);
+    }
+
+    public interface MsgTransactionCompleted {
+        void onMsgTransactionCompletedSuccessCallback(String signature);
+
+        void onMsgTransactionCompletedErrorCallback(Error error);
     }
 
     public void getAccount(AccountReceived onAccountReceived) {
@@ -21,6 +27,6 @@ public abstract class ScatterClient {
     public void completeTransaction(TransactionRequestParams transactionRequestParams, TransactionCompleted onTransactionCompleted) {
     }
 
-    public void completeMsgTransaction(MsgTransactionRequestParams data, TransactionCompleted onTransactionMsgCompleted) {
+    public void completeMsgTransaction(MsgTransactionRequestParams data, MsgTransactionCompleted onMsgTransactionMsgCompleted) {
     }
 }

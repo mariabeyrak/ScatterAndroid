@@ -10,14 +10,10 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.google.gson.Gson;
 import com.mariabeyrak.scatterintegration.Scatter;
 import com.mariabeyrak.scatterintegration.ScatterClient;
 import com.mariabeyrak.scatterintegration.models.requests.MsgTransaction.MsgTransactionRequestParams;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.request.TransactionRequestParams;
-import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.ReturnedFields;
-import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.SignData;
-import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.TransactionResponseData;
 import com.paytomat.eos.Eos;
 import com.paytomat.eos.PrivateKey;
 import com.paytomat.eos.signature.Signature;
@@ -34,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String accountName = "YOUR_ACCOUNT_NAME";
     private static final String key = "YOUR_PRIVATE_KEY";
 
-    final private static Gson gson = new Gson();
-
     private ScatterClient scatterClient = new ScatterClient() {
         @Override
         public void getAccount(AccountReceived onAccountReceived) {
@@ -47,15 +41,14 @@ public class MainActivity extends AppCompatActivity {
         public void completeTransaction(TransactionRequestParams transactionRequestParams, TransactionCompleted onTransactionCompleted) {
             Log.d(TAG, "completeTransaction");
             String[] signatures = toEosTransaction(transactionRequestParams, new PrivateKey(key)).getPackedTx().getSignatures();
-            String response = gson.toJson(new TransactionResponseData(new SignData(signatures, new ReturnedFields())));
-            onTransactionCompleted.onTransactionCompletedSuccessCallback(response);
+            onTransactionCompleted.onTransactionCompletedSuccessCallback(signatures);
         }
 
         @Override
-        public void completeMsgTransaction(MsgTransactionRequestParams params, TransactionCompleted onTransactionCompleted) {
+        public void completeMsgTransaction(MsgTransactionRequestParams params, MsgTransactionCompleted onMsgTransactionCompleted) {
             Log.d(TAG, "completeMsgTransaction");
             Signature signature = Eos.signTransactionRaw(Hex.decode(params.getData()), new PrivateKey(key));
-            onTransactionCompleted.onTransactionCompletedSuccessCallback(signature.toString());
+            onMsgTransactionCompleted.onMsgTransactionCompletedSuccessCallback(signature.toString());
         }
     };
 
