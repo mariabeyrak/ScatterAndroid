@@ -23,7 +23,8 @@ public class TransactionRequestParams {
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(date.getTime());
-            calendar.add(Calendar.MILLISECOND, calendar.getTimeZone().getRawOffset());
+            calendar.add(Calendar.MILLISECOND,
+                    calendar.getTimeZone().getRawOffset() + calendar.getTimeZone().getDSTSavings());
             return calendar.getTimeInMillis();
         } catch (ParseException e) {
             return 0;
