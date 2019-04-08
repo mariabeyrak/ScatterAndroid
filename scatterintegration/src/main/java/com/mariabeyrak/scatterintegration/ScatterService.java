@@ -1,13 +1,11 @@
 package com.mariabeyrak.scatterintegration;
 
-import android.util.Log;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 
 import com.google.gson.Gson;
 import com.mariabeyrak.scatterintegration.models.MethodName;
 import com.mariabeyrak.scatterintegration.models.ProtocolInfo;
-import com.mariabeyrak.scatterintegration.models.ResponseCodeInfo;
 import com.mariabeyrak.scatterintegration.models.ScatterResponse;
 import com.mariabeyrak.scatterintegration.models.requests.AppInfo.AppInfoResponseData;
 import com.mariabeyrak.scatterintegration.models.requests.MsgTransaction.MsgTransactionRequestParams;
@@ -15,6 +13,7 @@ import com.mariabeyrak.scatterintegration.models.requests.Transaction.request.Tr
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.ReturnedFields;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.SignData;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.TransactionResponseData;
+import com.mariabeyrak.scatterintegration.models.response.ResponseCodeInfo;
 
 import static com.mariabeyrak.scatterintegration.models.MethodName.GET_EOS_ACCOUNT;
 import static com.mariabeyrak.scatterintegration.models.MethodName.REQUEST_MSG_SIGNATURE;
@@ -69,8 +68,8 @@ final class ScatterService {
             }
 
             @Override
-            public void onTransactionCompletedErrorCallback(Error error) {
-                sendErrorScript(webView, REQUEST_SIGNATURE);
+            public void onTransactionCompletedErrorCallback(ResponseCodeInfo errorInfo, String messageToUser) {
+                sendErrorScript(webView, REQUEST_SIGNATURE, errorInfo, messageToUser);
             }
         };
 
@@ -87,8 +86,8 @@ final class ScatterService {
             }
 
             @Override
-            public void onMsgTransactionCompletedErrorCallback(Error error) {
-                sendErrorScript(webView, REQUEST_MSG_SIGNATURE);
+            public void onMsgTransactionCompletedErrorCallback(ResponseCodeInfo errorInfo, String messageToUser) {
+                sendErrorScript(webView, REQUEST_MSG_SIGNATURE, errorInfo, messageToUser);
             }
         };
 
@@ -96,11 +95,11 @@ final class ScatterService {
     }
 
     private static void sendSuccessScript(WebView webView, @MethodName.Methods String methodName, String responseData) {
-        injectJs(webView, new ScatterResponse(methodName, ResponseCodeInfo.SUCCESS, responseData).formatResponse());
+        injectJs(webView, new ScatterResponse(methodName, ResponseCodeInfo.SUCCESS, responseData).formatSuccessResponse());
     }
 
-    private static void sendErrorScript(WebView webView, @MethodName.Methods String methodName) {
-        injectJs(webView, new ScatterResponse(methodName, ResponseCodeInfo.ERROR, "\"\"").formatResponse());
+    private static void sendErrorScript(WebView webView, @MethodName.Methods String methodName, ResponseCodeInfo responseCodeInfo, String messageToUser) {
+        injectJs(webView, new ScatterResponse(methodName, responseCodeInfo, "\"\"").formatErrorResponse(messageToUser));
     }
 
     static void injectJs(final WebView webView, final String script) {
@@ -110,7 +109,6 @@ final class ScatterService {
                 webView.evaluateJavascript(script, new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
-                        Log.d(TAG, "onReceiveValue: " + value);
                     }
                 });
             }

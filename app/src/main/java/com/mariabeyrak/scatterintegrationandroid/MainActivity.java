@@ -33,20 +33,17 @@ public class MainActivity extends AppCompatActivity {
     private ScatterClient scatterClient = new ScatterClient() {
         @Override
         public void getAccount(AccountReceived onAccountReceived) {
-            Log.d(TAG, "getAccount");
             onAccountReceived.onAccountReceivedSuccessCallback(accountName);
         }
 
         @Override
         public void completeTransaction(TransactionRequestParams transactionRequestParams, TransactionCompleted onTransactionCompleted) {
-            Log.d(TAG, "completeTransaction");
             String[] signatures = toEosTransaction(transactionRequestParams, new PrivateKey(key)).getPackedTx().getSignatures();
             onTransactionCompleted.onTransactionCompletedSuccessCallback(signatures);
         }
 
         @Override
         public void completeMsgTransaction(MsgTransactionRequestParams params, MsgTransactionCompleted onMsgTransactionCompleted) {
-            Log.d(TAG, "completeMsgTransaction");
             Signature signature = Eos.signTransactionRaw(Hex.decode(params.getData()), new PrivateKey(key));
             onMsgTransactionCompleted.onMsgTransactionCompletedSuccessCallback(signature.toString());
         }

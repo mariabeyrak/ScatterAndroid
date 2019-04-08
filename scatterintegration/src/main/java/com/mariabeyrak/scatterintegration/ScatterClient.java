@@ -2,12 +2,12 @@ package com.mariabeyrak.scatterintegration;
 
 import com.mariabeyrak.scatterintegration.models.requests.MsgTransaction.MsgTransactionRequestParams;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.request.TransactionRequestParams;
+import com.mariabeyrak.scatterintegration.models.response.ResponseCodeInfo;
 
 public abstract class ScatterClient {
 
     public interface AppInfoReceived {
         void onAppInfoReceivedSuccessCallback(String appName, String appVersion);
-
         void onAccountReceivedErrorCallback(Error error);
     }
 
@@ -18,12 +18,14 @@ public abstract class ScatterClient {
 
     public interface TransactionCompleted {
         void onTransactionCompletedSuccessCallback(String[] signatures);
-        void onTransactionCompletedErrorCallback(Error error);
+
+        void onTransactionCompletedErrorCallback(ResponseCodeInfo errorInfo, String messageToUser);
     }
 
     public interface MsgTransactionCompleted {
         void onMsgTransactionCompletedSuccessCallback(String signature);
-        void onMsgTransactionCompletedErrorCallback(Error error);
+
+        void onMsgTransactionCompletedErrorCallback(ResponseCodeInfo errorInfo, String messageToUser);
     }
 
     public void getAppInfo(AppInfoReceived onAppInfoReceived) {

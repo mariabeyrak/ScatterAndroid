@@ -1,5 +1,7 @@
 package com.mariabeyrak.scatterintegration.models;
 
+import com.mariabeyrak.scatterintegration.models.response.ResponseCodeInfo;
+
 public class ScatterResponse {
     private String methodName;
     private ResponseCodeInfo responseCodeInfo;
@@ -11,8 +13,12 @@ public class ScatterResponse {
         this.dataInJson = dataInJson;
     }
 
-    public String formatResponse() {
-        return methodName + "('{\"message\":\"" + responseCodeInfo.getMessage() + "\",\"data\":" + dataInJson + ",\"code\":" + responseCodeInfo.getCode() + "}')";
+    public String formatSuccessResponse() {
+        return methodName + "('{\"message\":\"" + responseCodeInfo.getMessage().getMessage() + "\",\"data\":" + dataInJson + ",\"code\":" + responseCodeInfo.getCode().getCode() + "}')";
+    }
+
+    public String formatErrorResponse(String messageToUser) {
+        return methodName + "('{\"code\":" + responseCodeInfo.getCode().getCode() + ",\"message\":\"" + messageToUser + "\",\"isError\":true,\"type\":\"" + responseCodeInfo.getMessage().getMessage() + "\"}')";
     }
 
 }
