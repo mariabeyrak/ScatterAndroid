@@ -69,7 +69,7 @@ final class ScatterService {
 
             @Override
             public void onTransactionCompletedErrorCallback(ResponseCodeInfo errorInfo, String messageToUser) {
-                sendErrorScript(webView, REQUEST_SIGNATURE, errorInfo, messageToUser);
+                sendErrorScript(webView, REQUEST_SIGNATURE, errorInfo == null ? ResponseCodeInfo.UNKNOWN_ERROR : errorInfo, messageToUser);
             }
         };
 
@@ -87,7 +87,7 @@ final class ScatterService {
 
             @Override
             public void onMsgTransactionCompletedErrorCallback(ResponseCodeInfo errorInfo, String messageToUser) {
-                sendErrorScript(webView, REQUEST_MSG_SIGNATURE, errorInfo, messageToUser);
+                sendErrorScript(webView, REQUEST_MSG_SIGNATURE, errorInfo == null ? ResponseCodeInfo.UNKNOWN_ERROR : errorInfo, messageToUser);
             }
         };
 
