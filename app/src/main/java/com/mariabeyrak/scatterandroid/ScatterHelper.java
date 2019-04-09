@@ -1,4 +1,4 @@
-package com.mariabeyrak.scatterintegrationandroid;
+package com.mariabeyrak.scatterandroid;
 
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.request.Action;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.request.Authorization;

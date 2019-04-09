@@ -1,4 +1,4 @@
-package com.mariabeyrak.scatterintegrationandroid;
+package com.mariabeyrak.scatterandroid;
 
 import org.junit.Test;
 

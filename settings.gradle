@@ -1,1 +1,1 @@
-include ':app', ':scatterintegration'
+include ':app', ':scatterandroid'

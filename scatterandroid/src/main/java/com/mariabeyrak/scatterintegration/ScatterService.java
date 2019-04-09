@@ -13,14 +13,15 @@ import com.mariabeyrak.scatterintegration.models.requests.Transaction.request.Tr
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.ReturnedFields;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.SignData;
 import com.mariabeyrak.scatterintegration.models.requests.Transaction.response.TransactionResponseData;
+import com.mariabeyrak.scatterintegration.models.response.ResponseCode;
 import com.mariabeyrak.scatterintegration.models.response.ResponseCodeInfo;
+import com.mariabeyrak.scatterintegration.models.response.ResponseType;
 
 import static com.mariabeyrak.scatterintegration.models.MethodName.GET_EOS_ACCOUNT;
 import static com.mariabeyrak.scatterintegration.models.MethodName.REQUEST_MSG_SIGNATURE;
 import static com.mariabeyrak.scatterintegration.models.MethodName.REQUEST_SIGNATURE;
 
 final class ScatterService {
-    private static String TAG = "<<SS";
     final static private Gson gson = new Gson();
 
     private ScatterService() {
@@ -69,7 +70,8 @@ final class ScatterService {
 
             @Override
             public void onTransactionCompletedErrorCallback(ResponseCodeInfo errorInfo, String messageToUser) {
-                sendErrorScript(webView, REQUEST_SIGNATURE, errorInfo == null ? ResponseCodeInfo.UNKNOWN_ERROR : errorInfo, messageToUser);
+                sendErrorScript(webView, REQUEST_SIGNATURE, errorInfo == null ?
+                        new ResponseCodeInfo(ResponseType.UNKNOWN_ERROR, ResponseCode.UNKNOWN_ERROR) : errorInfo, messageToUser);
             }
         };
 
@@ -87,7 +89,8 @@ final class ScatterService {
 
             @Override
             public void onMsgTransactionCompletedErrorCallback(ResponseCodeInfo errorInfo, String messageToUser) {
-                sendErrorScript(webView, REQUEST_MSG_SIGNATURE, errorInfo == null ? ResponseCodeInfo.UNKNOWN_ERROR : errorInfo, messageToUser);
+                sendErrorScript(webView, REQUEST_MSG_SIGNATURE, errorInfo == null ?
+                        new ResponseCodeInfo(ResponseType.UNKNOWN_ERROR, ResponseCode.UNKNOWN_ERROR) : errorInfo, messageToUser);
             }
         };
 
@@ -95,7 +98,7 @@ final class ScatterService {
     }
 
     private static void sendSuccessScript(WebView webView, @MethodName.Methods String methodName, String responseData) {
-        injectJs(webView, new ScatterResponse(methodName, ResponseCodeInfo.SUCCESS, responseData).formatSuccessResponse());
+        injectJs(webView, new ScatterResponse(methodName, new ResponseCodeInfo(ResponseType.SUCCESS, ResponseCode.SUCCESS), responseData).formatSuccessResponse());
     }
 
     private static void sendErrorScript(WebView webView, @MethodName.Methods String methodName, ResponseCodeInfo responseCodeInfo, String messageToUser) {

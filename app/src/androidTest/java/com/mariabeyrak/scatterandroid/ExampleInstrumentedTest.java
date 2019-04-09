@@ -1,4 +1,4 @@
-package com.mariabeyrak.scatterintegrationandroid;
+package com.mariabeyrak.scatterandroid;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

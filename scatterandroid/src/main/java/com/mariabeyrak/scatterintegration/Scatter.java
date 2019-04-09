@@ -55,6 +55,7 @@ public class Scatter {
     public void removeInterface() {
         if (webView.get() != null) {
             webView.get().removeJavascriptInterface(javascriptInterfaceName);
+            webView.clear();
         }
     }
 }

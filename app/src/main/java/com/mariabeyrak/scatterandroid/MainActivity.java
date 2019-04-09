@@ -1,4 +1,4 @@
-package com.mariabeyrak.scatterintegrationandroid;
+package com.mariabeyrak.scatterandroid;
 
 import android.annotation.TargetApi;
 import android.os.Build;
@@ -20,7 +20,7 @@ import com.paytomat.eos.signature.Signature;
 
 import org.bouncycastle.util.encoders.Hex;
 
-import static com.mariabeyrak.scatterintegrationandroid.ScatterHelper.toEosTransaction;
+import static com.mariabeyrak.scatterandroid.ScatterHelper.toEosTransaction;
 
 public class MainActivity extends AppCompatActivity {
     private static String TAG = "<<SS";
