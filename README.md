@@ -45,7 +45,7 @@ Create ```Scatter``` object, where ```webView``` - is your WebView:
  webView.getSettings().setJavaScriptEnabled(true);
  ```
  
- Clean all after yout activity/fragment destroys:
+ Clean all after your activity/fragment destroys:
  ```java
  scatterImplementation.removeInterface();
  ```
